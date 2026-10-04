@@ -326,3 +326,124 @@ class TruckSpot extends ParkingSpot
     }
 
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// step 5 : Create ParkingObserver class
+// It is automatically update display board when
+// the parking availability changes
+/////////////////////////////////////////////////////////////////////////////
+
+interface ParkingObserver
+{
+    void update();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// step 6 : ParkingFloor Class
+// It is used to manage parking floors
+/////////////////////////////////////////////////////////////////////////////
+
+class ParkingFloor
+{
+    // unique floor number
+    private int floorNumber;
+
+    // Collection of all parking spots
+    private List<ParkingSpot> parkingSpots;
+
+    // collection of observers registered for the floor
+    private List<ParkingObserver> observers;
+
+    public ParkingFloor(int floorNumber)
+    {
+        this.floorNumber = floorNumber;
+        this.parkingSpots = new ArrayList<>();
+        this.observers = new ArrayList<>(); 
+    }
+
+    public int getFloorNumber()
+    {
+        return this.floorNumber;
+    }
+
+    public void addParkingSpot(ParkingSpot spot)
+    {
+        this.parkingSpots.add(spot);
+    }
+
+    public void addObserver(ParkingObserver observer)
+    {
+        this.observers.add(observer);
+    }
+
+    private void notifyObservers()
+    {
+        for(ParkingObserver observer : observers)
+        {
+            observer.update();
+        }
+    }
+
+    // Method is going to search parking spot for specific type of vehicles
+    public ParkingSpot findAvailableSpot(Vehicle vehicle)
+    {
+        for(ParkingSpot spot : parkingSpots)
+        {
+            if(!spot.isOccupied()&& spot.canFitVehicle(vehicle))
+            {
+                return spot;
+            }
+
+        }
+        return null;
+    }
+
+    //called when new vehicle gets parked
+    public void occupySpot(ParkingSpot spot, Vehicle vehicle)
+    {
+        // allocate spot for vehicle
+        spot.parkVehicle(vehicle);
+
+        // notify all observers about the availability of spots
+        notifyObservers();
+
+    }
+
+    public void releaseSpot(ParkingSpot spot)
+    {
+        //release the already allocated spot
+        spot.removeVehicle();
+
+        // notify all obserevers about the availability of spots
+        notifyObservers();
+    }
+
+    public int getAvailableCount(SpotType type)
+    {
+        int count = 0;
+
+        for(ParkingSpot spot : parkingSpots)
+        {
+           if(spot.getSpotType() == type && !spot.isOccupied())
+           {
+               count++;
+           }
+        }
+        return count;
+    }
+
+    // Display all parking spots on specific floor
+    public void displayFloor()
+    {
+        System.out.println();
+
+        System.out.println("Floor : "+ floorNumber);
+
+        for(ParkingSpot spot : parkingSpots)
+        {
+            spot.display();
+        }
+    }
+
+}
+
