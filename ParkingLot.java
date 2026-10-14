@@ -447,3 +447,57 @@ class ParkingFloor
 
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// step 7 : Create ParkingDisplayBoard Class
+// It is used to create a class which displays the parking status
+//  
+// Subject -> ParkingFloor
+// Observer -> ParkingDisplayBoard
+//
+/////////////////////////////////////////////////////////////////////////////
+
+class ParkingDisplayBoard implements ParkingObserver
+{
+    // Floor whose availabilityis displayed by this board
+    private ParkingFloor floor;
+
+    public ParkingDisplayBoard(ParkingFloor floor)
+    {
+        this.floor = floor;
+    }
+
+    @Override 
+    public void update()
+    {
+        System.out.println();
+        System.out.println("--------- Display Board ---------");
+        
+        System.out.println("Floor : "+floor.getFloorNumber());
+
+        System.out.println("Available Bike spots : "+floor.getAvailableCount(SpotType.BIKE));
+       
+        System.out.println("Available Car spots : "+floor.getAvailableCount(SpotType.CAR));
+        
+        System.out.println("Available Truck spots : "+floor.getAvailableCount(SpotType.TRUCK));
+        
+        System.out.println("---------------------------------");
+        System.out.println();
+    }
+
+    // we can create a new observer for same subject
+    /*
+
+    class ParkingWebsite implements ParkingObserver
+    {
+
+        @Override 
+        public void update()
+        {
+            // send the availability information to website
+        }
+    }
+    
+    */
+}
+
+
