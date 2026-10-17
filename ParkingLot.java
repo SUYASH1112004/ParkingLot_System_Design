@@ -602,3 +602,44 @@ class WeekendPricingStrategy implements PricingStrategy
 
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Step 10 : Create PaymentStrategy Class
+// The PaymentStartegy Class supports different types of payment methods
+// Concept : Strategy Design Pattern
+/////////////////////////////////////////////////////////////////////////////
+
+// Common Contract for all payment methods
+
+interface PaymentStartegy
+{
+    void pay(double amount); 
+}
+
+class UPIPayment implements PaymentStartegy
+{
+    @Override 
+    public void pay(double amount)
+    {
+        System.out.println("UPI Amount is successfull : RS. "+ amount);
+    }
+}
+
+class CardPayment implements PaymentStartegy
+{
+    @Override 
+    public void pay(double amount)
+    {
+        System.out.println("UPI Amount is successfull : RS. "+ amount);
+    }
+}
+
+class CashPayment implements PaymentStartegy
+{
+    @Override 
+    public void pay(double amount)
+    {
+        System.out.println("UPI Amount is successfull : RS. "+ amount);
+    }
+    
+}
+
