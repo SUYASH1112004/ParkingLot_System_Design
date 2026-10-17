@@ -643,3 +643,155 @@ class CashPayment implements PaymentStartegy
     
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// step 11 : Create ParkingTicket class
+//  It is used to represent one complete parking transaction
+/////////////////////////////////////////////////////////////////////////////
+
+class ParkingTicket
+{
+    // USed for generating unique tickets
+    private static int counter = 1000;
+
+    // Ticket number for unique ticket
+    private int ticketNumber;
+
+    // Vehicle associated with that ticket
+    private Vehicle vehicle;
+
+    // Floor on which vehile is been parked
+    private ParkingFloor floor;
+
+    //Actual spot on which the vehicle is parked
+    private ParkingSpot spot;
+
+    // Time at which the vehicle arrives
+    private LocalDateTime entryTime;
+
+    // TIme at which the vehicle left
+    private LocalDateTime exitTime;
+
+    // STatus of ticket
+    private TicketStatus status;
+
+    public ParkingTicket(
+        Vehicle vehicle,
+        ParkingFloor floor,
+        ParkingSpot spot
+    )
+    {
+        this.vehicle = vehicle;
+        this.floor = floor;
+        this.spot = spot;
+        this.ticketNumber++;
+        this.entryTime = LocalDateTime.now();
+        this.status = TicketStatus.ACTIVE;
+    }
+
+    // GEtter method's
+
+    public int getTicketNumber()
+    {
+        return this.ticketNumber;
+    }
+
+    public Vehicle getVehicle()
+    {
+        return this.vehicle;
+    }
+
+    public ParkingFloor getFloor()
+    {
+        return this.floor;
+    }
+
+    public ParkingSpot getSpot()
+    {
+        return this.spot;
+    }
+
+    public LocalDateTime getEntryTime()
+    {
+        return this.entryTime;
+    }
+
+    public LocalDateTime getExitTime()
+    {
+        return this.exitTime;
+    }
+
+    public TicketStatus getStatus()
+    {
+        return this.status;
+    }
+
+    // Method gets called when vehicle is going out
+    public void closeTicket()
+    {
+        this.exitTime = LocalDateTime.now();
+        this.status = TicketStatus.CLOSED;
+    }
+
+    // Calculate the total number of hours the vehicle is parked 
+    public long calculateHours()
+    {
+        LocalDateTime endtime;
+
+        if(exitTime == null)
+        {
+            endtime = LocalDateTime.now();
+        }
+        else
+        {
+            endtime = exitTime;
+        }
+
+        //calculate actual time
+        long minutes = Duration.between(entryTime, endtime).toMinutes();
+
+        // COnvert minutes to hours
+        long hours = minutes / 60;
+
+        if(minutes % 60 != 0)
+        {
+            hours ++;
+        }
+
+        if(hours == 0)
+        {
+            hours  = 1;
+        }
+
+        return hours;
+    }
+
+    public void displayTicket()
+    {
+        System.out.println();
+
+        System.out.println("---------------------------------");
+        System.out.println("---------- Parking Ticket -------");
+        System.out.println("---------------------------------");
+
+        System.out.println("Ticket Number : "+this.ticketNumber);
+
+        System.out.println("Vechile Number : "+this.vehicle.getVehicleNumber());
+        
+        System.out.println("Vechile Type : "+this.vehicle.getVehicleType());
+
+        System.out.println("Floor Number : "+this.floor.getFloorNumber());
+
+        System.out.println("Spot Number : "+this.spot.getSpotNumber());
+
+        System.out.println("Entry Time : "+this.entryTime);
+
+        System.out.println("Ticket Status : "+this.status);
+
+        System.out.println("---------------------------------");
+
+        System.out.println();
+
+
+    }
+}
+
