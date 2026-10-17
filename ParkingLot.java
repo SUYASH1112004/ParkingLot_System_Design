@@ -683,7 +683,7 @@ class ParkingTicket
         this.vehicle = vehicle;
         this.floor = floor;
         this.spot = spot;
-        this.ticketNumber++;
+        this.ticketNumber = ++counter;
         this.entryTime = LocalDateTime.now();
         this.status = TicketStatus.ACTIVE;
     }
@@ -754,7 +754,7 @@ class ParkingTicket
 
         if(minutes % 60 != 0)
         {
-            hours ++;
+            hours++;
         }
 
         if(hours == 0)
@@ -791,6 +791,88 @@ class ParkingTicket
 
         System.out.println();
 
+
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Step 12 : Create EntryGate Class
+// It is used to handle entry of vehicle and its ticketgeneration
+/////////////////////////////////////////////////////////////////////////////
+
+class EntryGate
+{
+    private int gateNumber;
+
+    public EntryGate(int gateNumber)
+    {
+        this.gateNumber = gateNumber;
+    }
+
+    public int getGateNumber()
+    {
+        return this.gateNumber;
+    }
+
+    // It genertaes the new parking ticket when vehicle enters
+
+    public ParkingTicket generateTicket(Vehicle vehicle, ParkingFloor floor, ParkingSpot spot)
+    {
+        System.out.println("Vehicle entering from gate : "+ this.gateNumber);
+
+        //New Parking ticket gets generated for vehicle
+        return new ParkingTicket(vehicle, floor, spot);
+    }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Step 13 : Create ExitGate class
+// It is used to handle billing and payment during the vehicle exit
+/////////////////////////////////////////////////////////////////////////////
+
+class ExitGate
+{
+    private int gateNumber;
+
+    public ExitGate(int gateNumber)
+    {
+        this.gateNumber=gateNumber;
+    }
+
+    public int getGateNumber()
+    {
+        return this.gateNumber;
+    }
+
+    // This performs complete exit operations
+
+    public void processExit(
+        ParkingTicket ticket,
+        PricingStrategy pricingStrategy,
+        PaymentStartegy paymentStartegy
+    )
+    {
+
+        // step 1 : close the ticket and record the exit time
+        ticket.closeTicket();
+
+        // step 2 : Calculate the parking duration
+        long hours = ticket.calculateHours();
+
+        double amount = pricingStrategy.calculatePrice(ticket.getVehicle(), hours);
+
+        System.out.println();
+
+        System.out.println("Vechile exiting from gate : "+gateNumber);
+        
+        System.out.println("PArking Duration : "+hours);
+
+        System.out.println("Parking charges : "+amount);
+
+        // Step 4 : Process the payment using selected payment method
+
+        paymentStartegy.pay(amount);
 
     }
 }
